@@ -1,0 +1,30 @@
+# InfraSonar - agents configuration meta data (.CONST.AGENTS_CONFIG_META_YML)
+docker:
+  environment:
+  - list: LOG_LEVEL
+    options:
+    - "debug"
+    - "info"
+    - "warning"
+    - "error"
+    - "critical"
+    default: "warning"
+  - int: LOG_COLORIZED
+    min: 0
+    max: 1
+    default: 0
+
+speedtest:
+  environment:
+  - list: LOG_LEVEL
+    options:
+    - "debug"
+    - "info"
+    - "warning"
+    - "error"
+    - "critical"
+    default: "warning"
+  - int: LOG_COLORIZED
+    min: 0
+    max: 1
+    default: 0
