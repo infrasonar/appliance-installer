@@ -33,7 +33,7 @@ func dockerComposeVersionCheck(args *Arguments) error {
 		return fmt.Errorf("docker compose version too old: %s (required >= %d.0.0)", version, MinDockerVersion)
 	}
 
-	args.Printf("Docker Compose version v%s\n", version)
+	args.Printf("docker compose version v%s\n", version)
 	return nil
 }
 
@@ -60,6 +60,6 @@ func dockerVersionCheck(args *Arguments) error {
 		return fmt.Errorf("docker version too old: %s (required >= %d.0.0)", version, MinDockerVersion)
 	}
 
-	args.Printf("Docker version v%s\n", version)
+	args.Printf("docker version v%s\n", version)
 	return nil
 }
