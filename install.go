@@ -105,8 +105,8 @@ func installEnv(args *Arguments) error {
 		return err
 	}
 	defer fp.Close()
-	fp.WriteString(content)
-	return nil
+	_, err = fp.WriteString(content)
+	return err
 }
 
 func installCompose(args *Arguments) error {
@@ -127,8 +127,8 @@ func installCompose(args *Arguments) error {
 		return err
 	}
 	defer fp.Close()
-	fp.WriteString(content)
-	return nil
+	_, err = fp.WriteString(content)
+	return err
 }
 
 func installConfig(args *Arguments) error {
@@ -139,8 +139,8 @@ func installConfig(args *Arguments) error {
 		return err
 	}
 	defer fp.Close()
-	fp.WriteString(configContent)
-	return nil
+	_, err = fp.WriteString(configContent)
+	return err
 }
 
 func install(args *Arguments) error {

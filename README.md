@@ -1,3 +1,6 @@
+[![CI](https://github.com/infrasonar/appliance-installer/workflows/CI/badge.svg)](https://github.com/infrasonar/appliance-installer/actions)
+[![Release Version](https://img.shields.io/github/release/infrasonar/appliance-installer)](https://github.com/infrasonar/appliance-installer/releases)
+
 # InfraSonar Appliance Installer
 
 ## Help information
