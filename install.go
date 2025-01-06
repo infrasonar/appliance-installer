@@ -90,7 +90,7 @@ const configContent = `## WARNING: InfraSonar will make 'password' and 'secret' 
 ## !! This file is managed by InfraSonar !!
 ##
 ## It's okay to add custom probe configuration for when you want to
-## specify the "_use" value for assets. The appliance toolktip will not
+## specify the "_use" value for assets. The appliance manager will not
 ## overwrite these custom probe configurations. You can also add additional
 ## assets configurations for managed probes.
 `

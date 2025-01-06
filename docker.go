@@ -88,7 +88,7 @@ func dockerRun(cmd *exec.Cmd, args *Arguments) error {
 	cmd.Stderr = cmd.Stdout
 
 	// Make a new channel which will be used to ensure we get all output
-	done := make(chan struct{})
+	done := make(chan bool)
 
 	// Create a scanner which scans r in a line-by-line fashion
 	scanner := bufio.NewScanner(r)
@@ -104,7 +104,7 @@ func dockerRun(cmd *exec.Cmd, args *Arguments) error {
 		}
 
 		// We're all done, unblock the channel
-		done <- struct{}{}
+		done <- true
 
 	}()
 
@@ -132,7 +132,7 @@ func dockerStart(args *Arguments) error {
 
 	cmd = exec.Command("docker", "compose", "--progress", "plain", "up", "-d")
 	cmd.Dir = args.installationPath
-	args.Printf("Stating containers...\n")
+	args.Printf("Starting containers...\n")
 	if err := dockerRun(cmd, args); err != nil {
 		return err
 	}
