@@ -3,6 +3,32 @@
 
 # InfraSonar Appliance Installer
 
+Tool for deploying the InfraSonar appliance.
+
+Pre requirements: docker version 24 or higher
+
+## Installation
+
+1. Download the latest installer:
+
+- [Linux (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.0.0/appliance-installer-linux-amd64-1.0.0.tar.gz)
+- [Darwin (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.0.0/appliance-installer-darwin-amd64-1.0.0.tar.gz)
+- [Windows (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.0.0/appliance-installer-windows-amd64-1.0.0.zip)
+- [Solaris (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.0.0/appliance-installer-solaris-amd64-1.0.0.tar.gz)
+
+> If your platform is not listed above, refer to the [build from source](#build-from-source) section for instructions.
+
+2. Extract the contents of the archive using a tool like `tar`. Here's an example for Linux (amd64):
+```bash
+tar -xzvf appliance-installer-linux-amd64-1.0.0.tar.gz
+```
+
+3. Run the installer:
+
+```bash
+./appliance-installer --verbose
+```
+
 ## Help information
 
 ```
@@ -30,12 +56,21 @@ Arguments:
       --version            Print version information and quit
 ```
 
-## Downloads
+## Build from source
 
+Make sure [Go](https://go.dev/doc/install) is installed.
 
-
-
-## Build
+1. Clone the repository
+```bash
+git clone https://github.com/infrasonar/appliance-installer.git
 ```
+
+2. Open the cloned directory
+```bash
+cd appliance-installer
+```
+
+3. Build the appliance installer
+```bash
 CGO_ENABLED=0 go build -o appliance-installer
 ```
