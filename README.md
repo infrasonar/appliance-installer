@@ -3,9 +3,9 @@
 
 # InfraSonar Appliance Installer
 
-Tool for deploying the InfraSonar appliance.
+This tool facilitates the deployment of the InfraSonar appliance.
 
-Pre requirements: docker version 24 or higher
+**Prerequisites:** Docker version 24 or higher is required.
 
 ## Installation
 
