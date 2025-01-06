@@ -29,9 +29,13 @@ go.work.sum
 
 # Binary
 appliance-installer
+appliance-installer.exe
 
 # Local Test files
 target/
+
+# Binaries
+bin/
 
 #VScode
 .vscode/

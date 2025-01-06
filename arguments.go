@@ -4,16 +4,42 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path"
+	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/akamensky/argparse"
+	"github.com/fatih/color"
 )
+
+var reToken = regexp.MustCompile(`^[0-9a-f]{32}$`)
+var tokenValidation = func(args []string) error {
+	if !reToken.MatchString(args[0]) {
+		return errors.New("invalid token")
+	}
+	return nil
+}
+
+func askToken() string {
+	var response string
+	_, err := fmt.Scanln(&response)
+	if err != nil {
+		response = ""
+	}
+	response = strings.TrimSpace(response)
+	if reToken.MatchString(response) {
+		return response
+	} else {
+		fmt.Println("Invalid token, please enter a correct token")
+		return askToken()
+	}
+}
 
 type Arguments struct {
 	printVersion     bool
 	verbose          bool
 	yesToAll         bool
+	useDevelopment   bool
 	zone             int
 	installationPath string
 	agentcoreToken   string
@@ -49,12 +75,21 @@ func parseArgs() (*Arguments, error) {
 		},
 	)
 
+	useDevelopment := parser.Flag(
+		"d",
+		"use-development",
+		&argparse.Options{
+			Required: false,
+			Help:     "Use the InfraSonar development environment",
+		},
+	)
+
 	installationPath := parser.String(
 		"i",
 		"installation-path",
 		&argparse.Options{
 			Required: false,
-			Help:     "Path to store the asset Id (not required when an asset Id is provided)",
+			Help:     "Installation path for the docker compose and configuration files",
 		},
 	)
 	agentcoreToken := parser.String(
@@ -62,6 +97,7 @@ func parseArgs() (*Arguments, error) {
 		"agentcore-token",
 		&argparse.Options{
 			Required: false,
+			Validate: tokenValidation,
 			Help:     "Token for the Agentcore. Must be a container token with `CoreConnect` permissions",
 		},
 	)
@@ -70,7 +106,8 @@ func parseArgs() (*Arguments, error) {
 		"agent-token",
 		&argparse.Options{
 			Required: false,
-			Help:     "Token for the agents. Must be a container token with  `Read`, `InsertCheckData`, `AssetManagement` and `API` permissions",
+			Validate: tokenValidation,
+			Help:     "Token for the agents. Must be a container token with `Read`, `InsertCheckData`, `AssetManagement` and `API` permissions",
 		},
 	)
 
@@ -79,7 +116,7 @@ func parseArgs() (*Arguments, error) {
 		"zone",
 		&argparse.Options{
 			Required: false,
-			Help:     "Zone Id between 0 and 9 for the agentcore",
+			Help:     "Zone Id between 0 and 9",
 			Validate: func(args []string) error {
 				if zone, err := strconv.Atoi(args[0]); err == nil {
 					if zone < 0 || zone > 9 {
@@ -105,6 +142,7 @@ func parseArgs() (*Arguments, error) {
 		printVersion:     *printVersion,
 		verbose:          *verbose,
 		yesToAll:         *yesToAll,
+		useDevelopment:   *useDevelopment,
 		zone:             *zone,
 		installationPath: *installationPath,
 		agentcoreToken:   *agentcoreToken,
@@ -114,25 +152,20 @@ func parseArgs() (*Arguments, error) {
 
 func (args *Arguments) Printf(format string, a ...any) {
 	if args.verbose {
-		fmt.Printf(format, a...)
+		color.Yellow(format, a...)
 	}
 }
 
-func (args *Arguments) Println(a ...any) {
-	if args.verbose {
-		fmt.Println(a...)
+func (args *Arguments) EnsureAgentcoreToken() {
+	if args.agentcoreToken == "" {
+		fmt.Println("Please provide a token for the Agentcore (container token with `CoreConnect` permissions):")
+		args.agentcoreToken = askToken()
 	}
 }
 
-func (args *Arguments) InstallationPath() {
-	if args.installationPath == "" {
-		installationPath := "infrasonar"
-
-		if os.Geteuid() == 0 {
-			installationPath = "/etc/infrasonar"
-		} else if homeDir, err := os.UserHomeDir(); err != nil {
-			installationPath = path.Join(homeDir, "infrasonar")
-		}
-		fmt.Println(installationPath)
+func (args *Arguments) EnsureAgentToken() {
+	if args.agentToken == "" {
+		fmt.Println("Please provide a token for the agents (container token with `Read`, `InsertCheckData`, `AssetManagement` and `API` permissions):")
+		args.agentToken = askToken()
 	}
 }
