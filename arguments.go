@@ -48,42 +48,6 @@ type Arguments struct {
 
 func parseArgs() (*Arguments, error) {
 	parser := argparse.NewParser("installer", "Installation of the InfraSonar appliance")
-	printVersion := parser.Flag(
-		"v",
-		"version",
-		&argparse.Options{
-			Required: false,
-			Help:     "Print version information and quit",
-		},
-	)
-
-	verbose := parser.Flag(
-		"",
-		"verbose",
-		&argparse.Options{
-			Required: false,
-			Help:     "Enable verbose output",
-		},
-	)
-
-	yesToAll := parser.Flag(
-		"y",
-		"yes",
-		&argparse.Options{
-			Required: false,
-			Help:     "No confirmation prompts",
-		},
-	)
-
-	useDevelopment := parser.Flag(
-		"d",
-		"use-development",
-		&argparse.Options{
-			Required: false,
-			Help:     "Use the InfraSonar development environment",
-		},
-	)
-
 	installationPath := parser.String(
 		"i",
 		"installation-path",
@@ -110,7 +74,6 @@ func parseArgs() (*Arguments, error) {
 			Help:     "Token for the agents. Must be a container token with `Read`, `InsertCheckData`, `AssetManagement` and `API` permissions",
 		},
 	)
-
 	zone := parser.Int(
 		"z",
 		"zone",
@@ -126,6 +89,38 @@ func parseArgs() (*Arguments, error) {
 				return nil
 			},
 			Default: 0,
+		},
+	)
+	useDevelopment := parser.Flag(
+		"d",
+		"use-development",
+		&argparse.Options{
+			Required: false,
+			Help:     "Use the InfraSonar development environment",
+		},
+	)
+	verbose := parser.Flag(
+		"v",
+		"verbose",
+		&argparse.Options{
+			Required: false,
+			Help:     "Enable verbose output",
+		},
+	)
+	yesToAll := parser.Flag(
+		"y",
+		"yes",
+		&argparse.Options{
+			Required: false,
+			Help:     "No confirmation prompts",
+		},
+	)
+	printVersion := parser.Flag(
+		"",
+		"version",
+		&argparse.Options{
+			Required: false,
+			Help:     "Print version information and quit",
 		},
 	)
 

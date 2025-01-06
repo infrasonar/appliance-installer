@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
+
+	"github.com/fatih/color"
 )
 
 func exitOnErr(err error) {
@@ -17,17 +20,10 @@ func main() {
 	args, err := parseArgs()
 	exitOnErr(err)
 
+	// Check if we just need to print the version and exit
 	if args.printVersion {
 		fmt.Printf("InfraSonar appliance installer v%s\n", Version)
 		os.Exit(0)
-	}
-
-	if os.Geteuid() > 0 && !args.yesToAll {
-		// UID < 0 is Windows, UID = 0 is root on Linux and UID > 0 is a user
-		fmt.Println("The InfraSonar Appliance is typically installed as root. Are you sure you want to continue as a normal user? (yes/no)")
-		if !askForConfirmation() {
-			exitOnErr(ErrUserCanceled)
-		}
 	}
 
 	// Check if docker is installed and no appliance is running
@@ -43,13 +39,11 @@ func main() {
 	args.EnsureAgentToken()
 
 	if !args.yesToAll {
-		fmt.Printf(`
---------------------------------------------------------------------------
-  The appliance will be installed in '%s' for zone %d
---------------------------------------------------------------------------
+		content := fmt.Sprintf("The appliance for zone %d will be deployed in the '%s' directory", args.zone, args.installationPath)
+		divider := strings.Repeat("#", len(content)+4)
 
-Do you want to continue? (yes/no)
-`, args.installationPath, args.zone)
+		color.Yellow("\n%s\n\n  %s\n\n%s\n\n", divider, content, divider)
+		fmt.Println("Do you want to continue? (yes/no)")
 		if !askForConfirmation() {
 			exitOnErr(ErrUserCanceled)
 		}
@@ -62,8 +56,14 @@ Do you want to continue? (yes/no)
 	// Start InfraSonar appliance
 	exitOnErr(dockerStart(args))
 
+	website := "https://app.infrasonar.com"
+	if args.useDevelopment {
+		website = "https://devapp.infrasonar.com"
+	}
+
 	if !args.yesToAll {
-		fmt.Printf("done\n")
+		fmt.Printf("Done\n")
+		fmt.Printf("Open your container on %s and manage the appliance via the 'Agentcores' menu\n", website)
 	} else {
 		args.Printf("done\n")
 	}

@@ -43,7 +43,7 @@ func ensureInstallationPath(args *Arguments) error {
 	_, err := os.Stat(args.installationPath)
 
 	if err == nil && !args.yesToAll {
-		fmt.Printf("A file or directory already exists at '%s'. Overwrite and continue? (yes/no)\n", args.installationPath)
+		fmt.Printf("A file or directory already exists at '%s'.\n\nOverwrite and continue? (yes/no)\n", args.installationPath)
 		if !askForConfirmation() {
 			return ErrUserCanceled
 		}

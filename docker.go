@@ -37,7 +37,7 @@ func dockerComposeVersionCheck(args *Arguments) error {
 		return fmt.Errorf("docker compose version too old: %s (required >= %d.0.0)", version, MinDockerVersion)
 	}
 
-	args.Printf("docker compose version v%s\n", version)
+	args.Printf("Docker compose version v%s\n", version)
 	return nil
 }
 
@@ -62,7 +62,7 @@ func dockerVersionCheck(args *Arguments) error {
 		return fmt.Errorf("docker version too old: %s (required >= %d.0.0)", version, MinDockerVersion)
 	}
 
-	args.Printf("docker version v%s\n", version)
+	args.Printf("Docker version v%s\n", version)
 	return nil
 }
 
@@ -125,14 +125,14 @@ func dockerRun(cmd *exec.Cmd, args *Arguments) error {
 func dockerStart(args *Arguments) error {
 	cmd := exec.Command("docker", "compose", "--progress", "plain", "pull")
 	cmd.Dir = args.installationPath
-	args.Printf("pulling images...\n")
+	args.Printf("Pulling images...\n")
 	if err := dockerRun(cmd, args); err != nil {
 		return err
 	}
 
 	cmd = exec.Command("docker", "compose", "--progress", "plain", "up", "-d")
 	cmd.Dir = args.installationPath
-	args.Printf("stating containers...\n")
+	args.Printf("Stating containers...\n")
 	if err := dockerRun(cmd, args); err != nil {
 		return err
 	}
