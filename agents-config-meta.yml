@@ -1,6 +1,12 @@
 # InfraSonar - agents configuration meta data (.CONST.AGENTS_CONFIG_META_YML)
 docker:
+  help: |
+    You can optionally provide an ASSET_ID.
+    If no ID is given, a new asset will be created automatically during
+    the initial start, and its ID will be saved within the data volume.
   environment:
+  - str: ASSET_ID
+    re: "^([1-9][0-9]*)?$"
   - list: LOG_LEVEL
     options:
     - "debug"
@@ -15,7 +21,13 @@ docker:
     default: 0
 
 speedtest:
+  help: |
+    You can optionally provide an ASSET_ID.
+    If no ID is given, a new asset will be created automatically during
+    the initial start, and its ID will be saved within the data volume.
   environment:
+  - str: ASSET_ID
+    re: "^([1-9][0-9]*)?$"
   - list: LOG_LEVEL
     options:
     - "debug"
