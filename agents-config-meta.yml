@@ -40,3 +40,37 @@ speedtest:
     min: 0
     max: 1
     default: 0
+
+discovery:
+  help: |
+    You can optionally provide an ASSET_ID.
+    If no ID is given, a new asset will be created automatically during
+    the initial start, and its ID will be saved within the data volume.
+
+    The NETWORK environment variable is required and is expecting a network
+    using the syntax: 192.168.1.0/24
+
+    The CHECK_NMAP_INTERVAL has a default of 14400 seconds (every 4 hours).
+    It is recommended to make the interval not too small with 900 (15 minutes)
+    as absolute minimum value.
+  environment:
+  - str: ASSET_ID
+    re: "^([1-9][0-9]*)?$"
+  - list: LOG_LEVEL
+    options:
+    - "debug"
+    - "info"
+    - "warning"
+    - "error"
+    - "critical"
+    default: "warning"
+  - int: LOG_COLORIZED
+    min: 0
+    max: 1
+    default: 0
+  - str: NETWORK
+    re: "^\\w+$"
+  - str: CHECK_NMAP_INTERVAL
+    int: 14400
+    min: 900
+    max: 259200
