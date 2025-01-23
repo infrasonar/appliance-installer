@@ -67,9 +67,10 @@ func dockerVersionCheck(args *Arguments) error {
 }
 
 func dockerRunningCheck() error {
-	out, err := exec.Command("docker", "compose", "ls", "-q").Output()
+	out, err := exec.Command("docker", "compose", "ls", "-q").CombinedOutput()
 	if err != nil {
-		return err
+		msg := string(out)
+		return fmt.Errorf("failed to execute docker compose: %s (%s)", msg, err)
 	}
 	lines := strings.Split(strings.ReplaceAll(string(out), "\r\n", "\n"), "\n")
 	for _, line := range lines {
