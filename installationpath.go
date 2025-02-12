@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -13,12 +13,12 @@ func ensureInstallationPath(args *Arguments) error {
 		if err != nil {
 			return err
 		}
-		installationPath := path.Join(mydir, "infrasonar")
+		installationPath := filepath.Join(mydir, "infrasonar")
 
 		if os.Geteuid() == 0 {
 			installationPath = "/etc/infrasonar"
 		} else if homeDir, err := os.UserHomeDir(); err == nil {
-			installationPath = path.Join(homeDir, "infrasonar")
+			installationPath = filepath.Join(homeDir, "infrasonar")
 		}
 		fmt.Printf("Installation Path (enter path or press Enter for default: %s)\n", installationPath)
 		var response string
@@ -36,9 +36,9 @@ func ensureInstallationPath(args *Arguments) error {
 	}
 
 	if !strings.HasSuffix(args.installationPath, "infrasonar") {
-		args.installationPath = path.Join(args.installationPath, "infrasonar")
+		args.installationPath = filepath.Join(args.installationPath, "infrasonar")
 	}
-	configPath := path.Join(args.installationPath, "data", "config")
+	configPath := filepath.Join(args.installationPath, "data", "config")
 
 	_, err := os.Stat(args.installationPath)
 

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
-	"path"
+	"path/filepath"
 	"strings"
 )
 
@@ -34,12 +34,12 @@ services:
     network_mode: host
     restart: always
     volumes: &id003
-    - ./data:/data/
+    - <DATA_PATH>:/data/
   rapp:
     environment:
-      COMPOSE_FILE: <INSTALLATION_PATH>/docker-compose.yml
-      CONFIG_FILE: <INSTALLATION_PATH>/data/config/infrasonar.yaml
-      ENV_FILE: <INSTALLATION_PATH>/.env
+      COMPOSE_FILE: /etc/infrasonar/docker-compose.yml
+      CONFIG_FILE: /etc/infrasonar/data/config/infrasonar.yaml
+      ENV_FILE: /etc/infrasonar/.env
       USE_DEVELOPMENT: <USE_DEVELOPMENT>
     image: ghcr.io/infrasonar/rapp
     labels: *id001
@@ -47,7 +47,7 @@ services:
     network_mode: host
     restart: always
     volumes:
-    - <INSTALLATION_PATH>:<INSTALLATION_PATH>
+    - <INSTALLATION_PATH>:/etc/infrasonar
     - /var/run/docker.sock:/var/run/docker.sock
   watchtower:
     environment:
@@ -99,7 +99,7 @@ func installEnv(args *Arguments) error {
 	content := strings.Replace(templateEnv, "<AGENTCORE_TOKEN>", args.agentcoreToken, 1)
 	content = strings.Replace(content, "<AGENT_TOKEN>", args.agentToken, 1)
 	content = strings.Replace(content, "<AGENTCORE_ZONE_ID>", fmt.Sprint(args.zone), 1)
-	fn := path.Join(args.installationPath, ".env")
+	fn := filepath.Join(args.installationPath, ".env")
 	fp, err := os.Create(fn)
 	if err != nil {
 		return err
@@ -120,8 +120,9 @@ func installCompose(args *Arguments) error {
 	content := strings.Replace(templateCompose, "<HUB_ADDRESS>", hub_address, 1)
 	content = strings.ReplaceAll(content, "<INSTALLATION_PATH>", args.installationPath)
 	content = strings.Replace(content, "<USE_DEVELOPMENT>", use_development, 1)
+	content = strings.Replace(content, "<DATA_PATH>", fmt.Sprintf(".%cdata", os.PathSeparator), 1)
 
-	fn := path.Join(args.installationPath, "docker-compose.yml")
+	fn := filepath.Join(args.installationPath, "docker-compose.yml")
 	fp, err := os.Create(fn)
 	if err != nil {
 		return err
@@ -132,7 +133,7 @@ func installCompose(args *Arguments) error {
 }
 
 func installConfig(args *Arguments) error {
-	fn := path.Join(args.installationPath, "data", "config", "infrasonar.yaml")
+	fn := filepath.Join(args.installationPath, "data", "config", "infrasonar.yaml")
 
 	fp, err := os.Create(fn)
 	if err != nil {
