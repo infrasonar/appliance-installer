@@ -40,6 +40,7 @@ services:
       COMPOSE_FILE: /etc/infrasonar/docker-compose.yml
       CONFIG_FILE: /etc/infrasonar/data/config/infrasonar.yaml
       ENV_FILE: /etc/infrasonar/.env
+	  DATA_PATH: <DATA_PATH>
       USE_DEVELOPMENT: <USE_DEVELOPMENT>
     image: ghcr.io/infrasonar/rapp
     labels: *id001
@@ -120,7 +121,7 @@ func installCompose(args *Arguments) error {
 	content := strings.Replace(templateCompose, "<HUB_ADDRESS>", hub_address, 1)
 	content = strings.ReplaceAll(content, "<INSTALLATION_PATH>", args.installationPath)
 	content = strings.Replace(content, "<USE_DEVELOPMENT>", use_development, 1)
-	content = strings.Replace(content, "<DATA_PATH>", fmt.Sprintf(".%cdata", os.PathSeparator), 1)
+	content = strings.ReplaceAll(content, "<DATA_PATH>", fmt.Sprintf(".%cdata", os.PathSeparator))
 
 	fn := filepath.Join(args.installationPath, "docker-compose.yml")
 	fp, err := os.Create(fn)
