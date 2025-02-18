@@ -40,7 +40,7 @@ services:
       COMPOSE_FILE: /etc/infrasonar/docker-compose.yml
       CONFIG_FILE: /etc/infrasonar/data/config/infrasonar.yaml
       ENV_FILE: /etc/infrasonar/.env
-	  DATA_PATH: <DATA_PATH>
+      DATA_PATH: <DATA_PATH>
       USE_DEVELOPMENT: <USE_DEVELOPMENT>
     image: ghcr.io/infrasonar/rapp
     labels: *id001

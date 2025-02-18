@@ -1,4 +1,4 @@
 package main
 
 // Update README.md with the latest version
-const Version = "1.0.4"
+const Version = "1.0.5"
