@@ -36,14 +36,15 @@ func askToken() string {
 }
 
 type Arguments struct {
-	printVersion     bool
-	verbose          bool
-	yesToAll         bool
-	useDevelopment   bool
-	zone             int
-	installationPath string
-	agentcoreToken   string
-	agentToken       string
+	printVersion       bool
+	verbose            bool
+	yesToAll           bool
+	useDevelopment     bool
+	ignoreVersionCheck bool
+	zone               int
+	installationPath   string
+	agentcoreToken     string
+	agentToken         string
 }
 
 func parseArgs() (*Arguments, error) {
@@ -115,6 +116,14 @@ func parseArgs() (*Arguments, error) {
 			Help:     "No confirmation prompts",
 		},
 	)
+	ignoreVersionCheck := parser.Flag(
+		"",
+		"ignore-version-check",
+		&argparse.Options{
+			Required: false,
+			Help:     "Ignore Docker and Docker Compose version check",
+		},
+	)
 	printVersion := parser.Flag(
 		"",
 		"version",
@@ -134,14 +143,15 @@ func parseArgs() (*Arguments, error) {
 	}
 
 	return &Arguments{
-		printVersion:     *printVersion,
-		verbose:          *verbose,
-		yesToAll:         *yesToAll,
-		useDevelopment:   *useDevelopment,
-		zone:             *zone,
-		installationPath: *installationPath,
-		agentcoreToken:   *agentcoreToken,
-		agentToken:       *agentToken,
+		printVersion:       *printVersion,
+		verbose:            *verbose,
+		yesToAll:           *yesToAll,
+		useDevelopment:     *useDevelopment,
+		ignoreVersionCheck: *ignoreVersionCheck,
+		zone:               *zone,
+		installationPath:   *installationPath,
+		agentcoreToken:     *agentcoreToken,
+		agentToken:         *agentToken,
 	}, nil
 }
 

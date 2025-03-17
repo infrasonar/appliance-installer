@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"log"
 	"os/exec"
 	"regexp"
 	"strconv"
@@ -24,7 +25,11 @@ func dockerComposeVersionCheck(args *Arguments) error {
 
 	m := reDockerComposeVersion.FindStringSubmatch(string(out))
 	if len(m) != 4 {
-		return fmt.Errorf("unable to find docker compose version in output: %s", out)
+		if args.ignoreVersionCheck {
+			log.Printf("unable to find docker compose version in output: %s", out)
+			return nil
+		}
+		return fmt.Errorf("unable to find docker compose version in output: %s (use --ignore-version-check to ignore this error)", out)
 	}
 
 	major, _ := strconv.Atoi(m[1])
@@ -34,7 +39,11 @@ func dockerComposeVersionCheck(args *Arguments) error {
 	version := fmt.Sprintf("%d.%d.%d", major, minor, patch)
 
 	if major < MinDockerComposeVersion {
-		return fmt.Errorf("docker compose version too old: %s (required >= %d.0.0)", version, MinDockerVersion)
+		if args.ignoreVersionCheck {
+			log.Printf("docker compose version too old: %s (required >= %d.0.0) (ignored)", version, MinDockerVersion)
+			return nil
+		}
+		return fmt.Errorf("docker compose version too old: %s (required >= %d.0.0) (use --ignore-version-check to ignore this error)", version, MinDockerVersion)
 	}
 
 	args.Printf("Docker compose version v%s\n", version)
@@ -49,7 +58,11 @@ func dockerVersionCheck(args *Arguments) error {
 
 	m := reDockerVersion.FindStringSubmatch(string(out))
 	if len(m) != 4 {
-		return fmt.Errorf("unable to find docker version in output: %s", out)
+		if args.ignoreVersionCheck {
+			log.Printf("unable to find docker version in output: %s (ignored)", out)
+			return nil
+		}
+		return fmt.Errorf("unable to find docker version in output: %s (use --ignore-version-check to ignore this error)", out)
 	}
 
 	major, _ := strconv.Atoi(m[1])
@@ -59,7 +72,11 @@ func dockerVersionCheck(args *Arguments) error {
 	version := fmt.Sprintf("%d.%d.%d", major, minor, patch)
 
 	if major < MinDockerVersion {
-		return fmt.Errorf("docker version too old: %s (required >= %d.0.0)", version, MinDockerVersion)
+		if args.ignoreVersionCheck {
+			log.Printf("docker version too old: %s (required >= %d.0.0) (ignored)", version, MinDockerVersion)
+			return nil
+		}
+		return fmt.Errorf("docker version too old: %s (required >= %d.0.0) (use --ignore-version-check to ignore this error)", version, MinDockerVersion)
 	}
 
 	args.Printf("Docker version v%s\n", version)
