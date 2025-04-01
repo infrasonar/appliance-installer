@@ -26,9 +26,7 @@ services:
       LOG_LEVEL: info
       TOKEN: ${AGENTCORE_TOKEN}
     image: ghcr.io/infrasonar/agentcore
-    labels: &id001
-      com.centurylinklabs.watchtower.scope: ${AGENTCORE_TOKEN}
-    logging: &id002
+    logging: &id001
       options:
         max-size: 5m
     network_mode: host
@@ -43,29 +41,13 @@ services:
       DATA_PATH: <DATA_PATH>
       USE_DEVELOPMENT: <USE_DEVELOPMENT>
     image: ghcr.io/infrasonar/rapp
-    labels: *id001
     logging: *id002
     network_mode: host
     restart: always
     volumes:
     - <INSTALLATION_PATH>:/etc/infrasonar
     - /var/run/docker.sock:/var/run/docker.sock
-  watchtower:
-    environment:
-      WATCHTOWER_CLEANUP: true
-      WATCHTOWER_INCLUDE_RESTARTING: true
-      WATCHTOWER_POLL_INTERVAL: 21600
-      WATCHTOWER_SCOPE: ${AGENTCORE_TOKEN}
-    image: containrrr/watchtower
-    labels: *id001
-    logging: *id002
-    network_mode: host
-    restart: always
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    - /etc/localtime:/etc/localtime:ro
 x-infrasonar-template:
-  labels: *id001
   logging: *id002
   network_mode: host
   restart: always
