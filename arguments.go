@@ -39,7 +39,7 @@ type Arguments struct {
 	printVersion       bool
 	verbose            bool
 	yesToAll           bool
-	noRemoteAccess     bool
+	allowRemoteAccess  bool
 	useDevelopment     bool
 	ignoreVersionCheck bool
 	zone               int
@@ -93,12 +93,12 @@ func parseArgs() (*Arguments, error) {
 			Default: 0,
 		},
 	)
-	noRemoteAccess := parser.Flag(
+	allowRemoteAccess := parser.Flag(
 		"r",
-		"no-remote-access",
+		"remote-access",
 		&argparse.Options{
 			Required: false,
-			Help:     "Disable remote access on this appliance",
+			Help:     "Enable the option for remote access on this appliance for users with CoreConnect permissions (only applicable with -y/--yes)",
 		},
 	)
 	useDevelopment := parser.Flag(
@@ -155,7 +155,7 @@ func parseArgs() (*Arguments, error) {
 		printVersion:       *printVersion,
 		verbose:            *verbose,
 		yesToAll:           *yesToAll,
-		noRemoteAccess:     *noRemoteAccess,
+		allowRemoteAccess:  *allowRemoteAccess,
 		useDevelopment:     *useDevelopment,
 		ignoreVersionCheck: *ignoreVersionCheck,
 		zone:               *zone,
@@ -186,12 +186,12 @@ func (args *Arguments) EnsureAgentToken() {
 }
 
 func (args *Arguments) EnsureRemoteAccess() {
-	if !args.noRemoteAccess && !args.yesToAll {
-		fmt.Println("Do you want to enable the option for users with CoreConnect permissions to start remote access? (yes/no)")
+	if !args.allowRemoteAccess && !args.yesToAll {
+		fmt.Println("Do you want to allow users with CoreConnect permissions to start remote access (recommended)? (yes/no)")
 		if askForConfirmation() {
-			args.noRemoteAccess = true
+			args.allowRemoteAccess = true
 		} else {
-			args.noRemoteAccess = false
+			args.allowRemoteAccess = false
 		}
 	}
 }

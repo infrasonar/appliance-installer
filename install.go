@@ -101,7 +101,7 @@ func installCompose(args *Arguments) error {
 		use_development = "1"
 	}
 	allow_remote_access := "0"
-	if args.noRemoteAccess {
+	if args.allowRemoteAccess {
 		allow_remote_access = "1"
 	}
 	content := strings.Replace(templateCompose, "<HUB_ADDRESS>", hub_address, 1)
