@@ -94,7 +94,7 @@ func parseArgs() (*Arguments, error) {
 		},
 	)
 	noRemoteAccess := parser.Flag(
-		"d",
+		"r",
 		"no-remote-access",
 		&argparse.Options{
 			Required: false,
