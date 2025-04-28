@@ -41,19 +41,23 @@ usage: installer [-h|--help] [-i|--installation-path "<value>"]
 
 Arguments:
 
-  -h  --help               Print help information
-  -i  --installation-path  Installation path for the docker compose and
-                           configuration files
-  -c  --agentcore-token    Token for the Agentcore. Must be a container token
-                           with `CoreConnect` permissions
-  -a  --agent-token        Token for the agents. Must be a container token with
-                           `Read`, `InsertCheckData`, `AssetManagement` and
-                           `API` permissions
-  -z  --zone               Zone Id between 0 and 9. Default: 0
-  -d  --use-development    Use the InfraSonar development environment
-  -v  --verbose            Enable verbose output
-  -y  --yes                No confirmation prompts
-      --version            Print version information and quit
+  -h  --help                  Print help information
+  -i  --installation-path     Installation path for the docker compose and
+                              configuration files
+  -c  --agentcore-token       Token for the Agentcore. Must be a container
+                              token with `CoreConnect` permissions
+  -a  --agent-token           Token for the agents. Must be a container token
+                              with `Read`, `InsertCheckData`, `AssetManagement`
+                              and `API` permissions
+  -z  --zone                  Zone Id between 0 and 9. Default: 0
+  -r  --remote-access         Enable the option for remote access on this
+                              appliance for users with CoreConnect permissions
+                              (only applicable with -y/--yes)
+  -d  --use-development       Use the InfraSonar development environment
+  -v  --verbose               Enable verbose output
+  -y  --yes                   No confirmation prompts
+      --ignore-version-check  Ignore Docker and Docker Compose version check
+      --version               Print version information and quit
 ```
 
 ## Build from source
