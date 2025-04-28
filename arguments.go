@@ -39,6 +39,7 @@ type Arguments struct {
 	printVersion       bool
 	verbose            bool
 	yesToAll           bool
+	noRemoteAccess     bool
 	useDevelopment     bool
 	ignoreVersionCheck bool
 	zone               int
@@ -90,6 +91,14 @@ func parseArgs() (*Arguments, error) {
 				return nil
 			},
 			Default: 0,
+		},
+	)
+	noRemoteAccess := parser.Flag(
+		"d",
+		"no-remote-access",
+		&argparse.Options{
+			Required: false,
+			Help:     "Disable remote access on this appliance",
 		},
 	)
 	useDevelopment := parser.Flag(
@@ -146,6 +155,7 @@ func parseArgs() (*Arguments, error) {
 		printVersion:       *printVersion,
 		verbose:            *verbose,
 		yesToAll:           *yesToAll,
+		noRemoteAccess:     *noRemoteAccess,
 		useDevelopment:     *useDevelopment,
 		ignoreVersionCheck: *ignoreVersionCheck,
 		zone:               *zone,
@@ -172,5 +182,16 @@ func (args *Arguments) EnsureAgentToken() {
 	if args.agentToken == "" {
 		fmt.Println("Please provide a token for the agents (container token with `Read`, `InsertCheckData`, `AssetManagement` and `API` permissions):")
 		args.agentToken = askToken()
+	}
+}
+
+func (args *Arguments) EnsureRemoteAccess() {
+	if !args.noRemoteAccess && !args.yesToAll {
+		fmt.Println("Do you want to enable the option for users with CoreConnect permissions to start remote access? (yes/no)")
+		if askForConfirmation() {
+			args.noRemoteAccess = true
+		} else {
+			args.noRemoteAccess = false
+		}
 	}
 }

@@ -35,6 +35,7 @@ services:
     - <DATA_PATH>:/data/
   rapp:
     environment:
+      ALLOW_REMOTE_ACCESS: <ALLOW_REMOTE_ACCESS>
       COMPOSE_FILE: /etc/infrasonar/docker-compose.yml
       CONFIG_FILE: /etc/infrasonar/data/config/infrasonar.yaml
       ENV_FILE: /etc/infrasonar/.env
@@ -99,9 +100,13 @@ func installCompose(args *Arguments) error {
 		hub_address = "devhub.infrasonar.com"
 		use_development = "1"
 	}
-
+	allow_remote_access := "0"
+	if args.noRemoteAccess {
+		allow_remote_access = "1"
+	}
 	content := strings.Replace(templateCompose, "<HUB_ADDRESS>", hub_address, 1)
 	content = strings.ReplaceAll(content, "<INSTALLATION_PATH>", args.installationPath)
+	content = strings.Replace(content, "<ALLOW_REMOTE_ACCESS>", allow_remote_access, 1)
 	content = strings.Replace(content, "<USE_DEVELOPMENT>", use_development, 1)
 	content = strings.ReplaceAll(content, "<DATA_PATH>", fmt.Sprintf(".%cdata", os.PathSeparator))
 
