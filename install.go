@@ -31,7 +31,7 @@ services:
         max-size: 5m
     network_mode: host
     restart: always
-    volumes: &id003
+    volumes: &id002
     - <DATA_PATH>:/data/
   rapp:
     environment:
@@ -42,17 +42,17 @@ services:
       DATA_PATH: <DATA_PATH>
       USE_DEVELOPMENT: <USE_DEVELOPMENT>
     image: ghcr.io/infrasonar/rapp
-    logging: *id002
+    logging: *id001
     network_mode: host
     restart: always
     volumes:
     - <INSTALLATION_PATH>:/etc/infrasonar
     - /var/run/docker.sock:/var/run/docker.sock
 x-infrasonar-template:
-  logging: *id002
+  logging: *id001
   network_mode: host
   restart: always
-  volumes: *id003
+  volumes: *id002
 `
 
 const configContent = `## WARNING: InfraSonar will make 'password' and 'secret' values unreadable but
