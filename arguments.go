@@ -42,6 +42,7 @@ type Arguments struct {
 	allowRemoteAccess  bool
 	useDevelopment     bool
 	ignoreVersionCheck bool
+	providedZone       bool
 	zone               int
 	installationPath   string
 	agentcoreToken     string
@@ -76,17 +77,19 @@ func parseArgs() (*Arguments, error) {
 			Help:     "Token for the agents. Must be a container token with `Read`, `InsertCheckData`, `AssetManagement` and `API` permissions",
 		},
 	)
+	providedZone := false
 	zone := parser.Int(
 		"z",
 		"zone",
 		&argparse.Options{
 			Required: false,
-			Help:     "Zone Id between 0 and 9",
+			Help:     "Zone Id between 0 and 9. For non-primary appliances, we recommend starting in a temporary zone like 9. Install and configure the required collectors there first",
 			Validate: func(args []string) error {
 				if zone, err := strconv.Atoi(args[0]); err == nil {
 					if zone < 0 || zone > 9 {
 						return errors.New("expecting a value between 0 and 9")
 					}
+					providedZone = true
 				}
 				return nil
 			},
@@ -158,6 +161,7 @@ func parseArgs() (*Arguments, error) {
 		allowRemoteAccess:  *allowRemoteAccess,
 		useDevelopment:     *useDevelopment,
 		ignoreVersionCheck: *ignoreVersionCheck,
+		providedZone:       providedZone,
 		zone:               *zone,
 		installationPath:   *installationPath,
 		agentcoreToken:     *agentcoreToken,
@@ -193,5 +197,15 @@ func (args *Arguments) EnsureRemoteAccess() {
 		} else {
 			args.allowRemoteAccess = false
 		}
+	}
+}
+
+func (args *Arguments) EnsureZone() {
+	if !args.providedZone {
+		fmt.Println("In which zone will this appliance be installed? (0-9) [Press Enter for the default: 0]")
+		fmt.Println("")
+		fmt.Println("For non-primary appliances, we recommend starting in a temporary zone like 9. Install and configure the required collectors there first.")
+		fmt.Println("By switching to the final zone only once setup is verified, the appliance will be ready to process assets immediately, ensuring no monitoring data is lost during the transition.")
+		args.zone = askZone()
 	}
 }

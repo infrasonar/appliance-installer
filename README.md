@@ -11,16 +11,16 @@ This tool facilitates the deployment of the InfraSonar appliance.
 
 **1. Download the latest installer:**
 
-- [Linux (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.0.9/appliance-installer-linux-amd64-1.0.9.tar.gz)
-- [Darwin (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.0.9/appliance-installer-darwin-amd64-1.0.9.tar.gz)
-- [Windows (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.0.9/appliance-installer-windows-amd64-1.0.9.zip)
-- [Solaris (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.0.9/appliance-installer-solaris-amd64-1.0.9.tar.gz)
+- [Linux (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.0/appliance-installer-linux-amd64-1.1.0.tar.gz)
+- [Darwin (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.0/appliance-installer-darwin-amd64-1.1.0.tar.gz)
+- [Windows (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.0/appliance-installer-windows-amd64-1.1.0.zip)
+- [Solaris (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.0/appliance-installer-solaris-amd64-1.1.0.tar.gz)
 
 > If your platform is not listed above, refer to the [build from source](#build-from-source) section for instructions.
 
 **2. Extract the contents of the archive using a tool like `tar`. Here's an example for Linux (amd64):**
 ```bash
-tar -xzvf appliance-installer-linux-amd64-1.0.9.tar.gz
+tar -xzvf appliance-installer-linux-amd64-1.1.0.tar.gz
 ```
 
 **3. Run the installer:**
@@ -34,8 +34,9 @@ tar -xzvf appliance-installer-linux-amd64-1.0.9.tar.gz
 ```
 usage: installer [-h|--help] [-i|--installation-path "<value>"]
                  [-c|--agentcore-token "<value>"] [-a|--agent-token "<value>"]
-                 [-z|--zone <integer>] [-d|--use-development] [-v|--verbose]
-                 [-y|--yes] [--version]
+                 [-z|--zone <integer>] [-r|--remote-access]
+                 [-d|--use-development] [-v|--verbose] [-y|--yes]
+                 [--ignore-version-check] [--version]
 
                  Installation of the InfraSonar appliance
 
@@ -49,7 +50,10 @@ Arguments:
   -a  --agent-token           Token for the agents. Must be a container token
                               with `Read`, `InsertCheckData`, `AssetManagement`
                               and `API` permissions
-  -z  --zone                  Zone Id between 0 and 9. Default: 0
+  -z  --zone                  Zone Id between 0 and 9. For non-primary
+                              appliances, we recommend starting in a temporary
+                              zone like 9. Install and configure the required
+                              collectors there first. Default: 0
   -r  --remote-access         Enable the option for remote access on this
                               appliance for users with CoreConnect permissions
                               (only applicable with -y/--yes)

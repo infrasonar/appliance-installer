@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 // askForConfirmation uses Scanln to parse user input. A user must type in "yes" or "no" and
@@ -25,6 +26,25 @@ func askForConfirmation() bool {
 		fmt.Println("Please type yes or no and then press enter:")
 		return askForConfirmation()
 	}
+}
+
+// askZone uses Scanln to parse user input. A user must respond with a valid zone 0-9.
+// Empty is default zone 0
+func askZone() int {
+	var response string
+	_, err := fmt.Scanln(&response)
+	if err != nil {
+		response = ""
+	}
+	if response == "" {
+		response = "0"
+	}
+	zone, err := strconv.Atoi(response)
+	if err != nil || zone < 0 || zone > 9 {
+		fmt.Println("Please enter a valid zone [0-9]:")
+		return askZone()
+	}
+	return zone
 }
 
 // You might want to put the following two functions in a separate utility package.

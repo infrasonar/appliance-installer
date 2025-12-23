@@ -34,10 +34,13 @@ func main() {
 	// Ensure we have an installation path
 	exitOnErr(ensureInstallationPath(args))
 
-	// Ask for required token and remote access
+	// Ask for the zone, required token and remote access
+	args.EnsureZone()
 	args.EnsureRemoteAccess()
 	args.EnsureAgentcoreToken()
 	args.EnsureAgentToken()
+
+	os.Exit(0)
 
 	if !args.yesToAll {
 		content := fmt.Sprintf("The appliance for zone %d will be deployed in the '%s' directory", args.zone, args.installationPath)
