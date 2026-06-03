@@ -40,8 +40,6 @@ func main() {
 	args.EnsureAgentcoreToken()
 	args.EnsureAgentToken()
 
-	os.Exit(0)
-
 	if !args.yesToAll {
 		content := fmt.Sprintf("The appliance for zone %d will be deployed in the '%s' directory", args.zone, args.installationPath)
 		divider := strings.Repeat("#", len(content)+4)
