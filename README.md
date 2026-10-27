@@ -11,16 +11,16 @@ This tool facilitates the deployment of the InfraSonar appliance.
 
 **1. Download the latest installer:**
 
-- [Linux (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.1/appliance-installer-linux-amd64-1.1.1.tar.gz)
-- [Darwin (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.1/appliance-installer-darwin-amd64-1.1.1.tar.gz)
-- [Windows (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.1/appliance-installer-windows-amd64-1.1.1.zip)
-- [Solaris (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.1/appliance-installer-solaris-amd64-1.1.1.tar.gz)
+- [Linux (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.2/appliance-installer-linux-amd64-1.1.2.tar.gz)
+- [Darwin (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.2/appliance-installer-darwin-amd64-1.1.2.tar.gz)
+- [Windows (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.2/appliance-installer-windows-amd64-1.1.2.zip)
+- [Solaris (amd64)](https://github.com/infrasonar/appliance-installer/releases/download/v1.1.2/appliance-installer-solaris-amd64-1.1.2.tar.gz)
 
 > If your platform is not listed above, refer to the [build from source](#build-from-source) section for instructions.
 
 **2. Extract the contents of the archive using a tool like `tar`. Here's an example for Linux (amd64):**
 ```bash
-tar -xzvf appliance-installer-linux-amd64-1.1.1.tar.gz
+tar -xzvf appliance-installer-linux-amd64-1.1.2.tar.gz
 ```
 
 **3. Run the installer:**
@@ -81,4 +81,14 @@ cd appliance-installer
 **3. Build the appliance installer**
 ```bash
 CGO_ENABLED=0 go build -o appliance-installer
+```
+
+
+### Update packages
+
+GO Packages:
+
+```bash
+go get -u ./...
+go mod tidy
 ```

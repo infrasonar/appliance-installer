@@ -32,7 +32,7 @@ services:
     network_mode: host
     restart: always
     volumes: &id002
-    - <DATA_PATH>:/data/
+    - <DATA_PATH_OS>:/data/
   rapp:
     environment:
       ALLOW_REMOTE_ACCESS: <ALLOW_REMOTE_ACCESS>
@@ -88,7 +88,9 @@ func installEnv(args *Arguments) error {
 	if err != nil {
 		return err
 	}
-	defer fp.Close()
+	defer func() {
+		_ = fp.Close()
+	}()
 	_, err = fp.WriteString(content)
 	return err
 }
@@ -108,14 +110,17 @@ func installCompose(args *Arguments) error {
 	content = strings.ReplaceAll(content, "<INSTALLATION_PATH>", args.installationPath)
 	content = strings.Replace(content, "<ALLOW_REMOTE_ACCESS>", allow_remote_access, 1)
 	content = strings.Replace(content, "<USE_DEVELOPMENT>", use_development, 1)
-	content = strings.ReplaceAll(content, "<DATA_PATH>", fmt.Sprintf(".%cdata", os.PathSeparator))
+	content = strings.Replace(content, "<DATA_PATH_OS>", fmt.Sprintf(".%cdata", os.PathSeparator), 1)
+	content = strings.Replace(content, "<DATA_PATH>", "./data", 1)
 
 	fn := filepath.Join(args.installationPath, "docker-compose.yml")
 	fp, err := os.Create(fn)
 	if err != nil {
 		return err
 	}
-	defer fp.Close()
+	defer func() {
+		_ = fp.Close()
+	}()
 	_, err = fp.WriteString(content)
 	return err
 }
@@ -127,7 +132,9 @@ func installConfig(args *Arguments) error {
 	if err != nil {
 		return err
 	}
-	defer fp.Close()
+	defer func() {
+		_ = fp.Close()
+	}()
 	_, err = fp.WriteString(configContent)
 	return err
 }
